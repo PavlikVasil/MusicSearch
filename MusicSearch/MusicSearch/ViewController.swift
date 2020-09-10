@@ -93,9 +93,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             let jsonDecoder = JSONDecoder()
             
             do{
-                let searchResults = try jsonDecoder.decode(StoreItems.self, from: data)
-                self.albums.append(contentsOf: searchResults.results)
-                self.albums.sort(by: <)
+                
+                let searchResults = try jsonDecoder.decode(StoreItems?.self, from: data)
+                self.albums.append(contentsOf: searchResults!.results!)
+                //self.albums.sort(by: <)
                 completion(nil)
             } catch {
                 print("cant to decode: \(error)")
@@ -197,6 +198,12 @@ extension ViewController{
         let searchView: UICollectionReusableView = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "SearchBar", for: indexPath)
         return searchView
     }
-    
+}
 
+extension Array {
+    public mutating func append(_ newElement: Element?) {
+        if let element = newElement {
+            self.append(element)
+        }
+    }
 }

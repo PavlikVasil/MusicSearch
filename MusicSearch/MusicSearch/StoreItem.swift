@@ -10,17 +10,25 @@ import Foundation
 
 struct StoreItems: Codable{
     var resultCount: Int
-    let results: [StoreItem]
+    let results: [StoreItem]?
 }
 
 struct StoreItem: Codable, Comparable{
     static func < (lhs: StoreItem, rhs: StoreItem) -> Bool {
-            return lhs.collectionName < rhs.collectionName
+        var isSorted = false
+        if let first = lhs.collectionName, let second = rhs.collectionName{
+            return first < second
+        }
+        return isSorted
     }
     
+    /*static func < (lhs: StoreItem, rhs: StoreItem) -> Bool {
+        return lhs.collectionName < rhs.collectionName
+    }*/
+    
     var artistName: String
-    var collectionName: String
-    var collectionId: Int
+    var collectionName: String?
+    var collectionId: Int?
     var artworkUrl60: URL
     var artworkUrl100: URL
     var collectionPrice: Double
@@ -39,8 +47,8 @@ struct StoreItem: Codable, Comparable{
     init(from decoder: Decoder) throws {
         let valueContainer = try decoder.container(keyedBy: CodingKeys.self)
         self.artistName = try valueContainer.decode(String.self, forKey: CodingKeys.artistName)
-        self.collectionName = try valueContainer.decode(String.self, forKey: CodingKeys.collectionName)
-        self.collectionId = try valueContainer.decode(Int.self, forKey: CodingKeys.collectionId)
+        self.collectionName = try? valueContainer.decode(String?.self, forKey: CodingKeys.collectionName)
+        self.collectionId = try? valueContainer.decode(Int?.self, forKey: CodingKeys.collectionId)
         self.artworkUrl60 = try valueContainer.decode(URL.self, forKey: CodingKeys.artworkUrl60)
         self.artworkUrl100 = try valueContainer.decode(URL.self, forKey: CodingKeys.artworkUrl100)
         self.collectionPrice = try valueContainer.decode(Double.self, forKey: CodingKeys.collectionPrice)

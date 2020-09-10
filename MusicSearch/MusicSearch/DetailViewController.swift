@@ -48,7 +48,8 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
         
-        self.performSearch(searchTerm: album.collectionId){ (error) in
+        if album.collectionId != nil{
+         performSearch(searchTerm: album.collectionId!){ (error) in
         if let error = error{
             print("error fetching data: \(error)")
         } else {
@@ -59,6 +60,7 @@ class DetailViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
         
     
+    }
     }
     
     let baseURL = URL(string:"https://itunes.apple.com/lookup?country=US&entity=song")!
@@ -126,6 +128,7 @@ extension DetailViewController{
         
         cell.trackNumber?.text = String(describing: searchResult.trackNumber!)
         cell.trackName?.text = searchResult.trackName!
+        
         
         return cell
     }
